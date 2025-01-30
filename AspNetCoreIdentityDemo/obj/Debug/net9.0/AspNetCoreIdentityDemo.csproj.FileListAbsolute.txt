@@ -218,3 +218,7 @@
 /home/ylandolsi/Desktop/AspNetCoreIdentityDemo/AspNetCoreIdentityDemo/obj/Debug/net9.0/AspNetCoreIdentityDemo.pdb
 /home/ylandolsi/Desktop/AspNetCoreIdentityDemo/AspNetCoreIdentityDemo/obj/Debug/net9.0/AspNetCoreIdentityDemo.genruntimeconfig.cache
 /home/ylandolsi/Desktop/AspNetCoreIdentityDemo/AspNetCoreIdentityDemo/obj/Debug/net9.0/ref/AspNetCoreIdentityDemo.dll
+/home/ylandolsi/Desktop/AspNetCoreIdentityDemo/AspNetCoreIdentityDemo/bin/Debug/net9.0/Swashbuckle.AspNetCore.Swagger.dll
+/home/ylandolsi/Desktop/AspNetCoreIdentityDemo/AspNetCoreIdentityDemo/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/home/ylandolsi/Desktop/AspNetCoreIdentityDemo/AspNetCoreIdentityDemo/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/home/ylandolsi/Desktop/AspNetCoreIdentityDemo/AspNetCoreIdentityDemo/bin/Debug/net9.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll

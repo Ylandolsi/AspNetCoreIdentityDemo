@@ -9,9 +9,12 @@ namespace AspNetCoreIdentityDemo.Controllers;
 public class AdministrationController : ControllerBase
 {
     private readonly RoleManager<ApplicationRole> _roleManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public AdministrationController(RoleManager<ApplicationRole> roleManager)
+    public AdministrationController(RoleManager<ApplicationRole> roleManager,
+        UserManager<ApplicationUser> userManager)
     {
+        _userManager = userManager;
         _roleManager = roleManager;
     }
 
@@ -21,7 +24,7 @@ public class AdministrationController : ControllerBase
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(ModelState);
+            return UnprocessableEntity(ModelState);
         }
 
         bool roleExists = await _roleManager.RoleExistsAsync(model.RoleName);
@@ -48,7 +51,7 @@ public class AdministrationController : ControllerBase
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest(ModelState);
+            return UnprocessableEntity(ModelState);
         }
 
         var role = await _roleManager.FindByIdAsync(model.Id);
@@ -88,4 +91,76 @@ public class AdministrationController : ControllerBase
 
         return BadRequest(result.Errors);
     }
+
+
+    [HttpPost("assign-role")]
+    public async Task<IActionResult> AssignRole([FromBody] AssignRoleModel model)
+    {
+        var user = await _userManager.FindByIdAsync(model.UserId);
+        if (user == null)
+        {
+            return NotFound("User not found.");
+        }
+
+        // Check if the role exists
+        var roleExists = await _roleManager.RoleExistsAsync(model.RoleName);
+        if (!roleExists)
+        {
+            return BadRequest("Role does not exist.");
+        }
+
+        // Assign the role to the user
+        var result = await _userManager.AddToRoleAsync(user, model.RoleName);
+        if (result.Succeeded)
+        {
+            return Ok($"Role '{model.RoleName}' assigned to user '{user.UserName}' successfully.");
+        }
+
+        return BadRequest(result.Errors);
+    }
+
+    [HttpPost("remove-role")]
+    public async Task<IActionResult> RemoveRole([FromBody] AssignRoleModel model)
+    {
+        // Find the user
+        var user = await _userManager.FindByIdAsync(model.UserId);
+        if (user == null)
+        {
+            return NotFound("User not found.");
+        }
+
+        // Check if the role exists
+        var roleExists = await _roleManager.RoleExistsAsync(model.RoleName);
+        if (!roleExists)
+        {
+            return BadRequest("Role does not exist.");
+        }
+
+        // Remove the role from the user
+        var result = await _userManager.RemoveFromRoleAsync(user, model.RoleName);
+        if (result.Succeeded)
+        {
+            return Ok($"Role '{model.RoleName}' removed from user '{user.UserName}' successfully.");
+        }
+
+        return BadRequest(result.Errors);
+    }
+
+    [HttpGet("user-roles/{userId}")]
+    public async Task<IActionResult> GetUserRoles(string userId)
+    {
+        // Find the user
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return NotFound("User not found.");
+        }
+
+        // Get the user's roles
+        var roles = await _userManager.GetRolesAsync(user);
+        return Ok(roles);
+    }
+
+
+
 }
